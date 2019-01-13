@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+<!--   I need to load the properties file which has defined attributes-->
+	
+	<context:property-placeholder location="classpath:sport.properties"/>
+
+	<!-- Add a logger config to see logging messages. - For more detailed logs, 
+		set values to "FINEST" - For info on logging levels, see: http://www.vogella.com/tutorials/Logging/article.html 
+		<bean id="myLoggerConfig" class="com.luv2code.springdemo.MyLoggerConfig" 
+		init-method="initLogger"> <property name="rootLoggerLevel" value="FINE" /> 
+		<property name="printedLoggerLevel" value="FINE"/> </bean> -->
+
+	<!-- Define dependency bean -->
+
+	<bean id="myfortune" class="com.myapp.springproject.HappyFortune"></bean>
+
+	<bean id="randomFortune" class="com.myapp.springproject.RandomFortuneServiceImpl"></bean>
+
+	<bean id="myCoach" class="com.myapp.springproject.BaseballCoach">
+
+		<!-- Adding constructor injection -->
+		<constructor-arg ref="myfortune" />
+	</bean>
+
+	<bean id="myTrackCoach" class="com.myapp.springproject.TrackCoach">
+
+		<!-- Adding constructor injection -->
+		<constructor-arg ref="randomFortune" />
+	</bean>
+
+	<bean id="myCricketCoach"
+		class="com.myapp.springproject.CricketCoach">
+
+		<!-- Adding constructor injection   property name should match with the getter setter name and ref nae should match with the injected bean name-->
+		<property name="fortuneService" ref="myfortune" />
+		<property name="emailAddress" value="${mycoach.email}" />
+		<property name="team" value="${mycoach.team}" />
+	</bean>
+	
+</beans>
